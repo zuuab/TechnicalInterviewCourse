@@ -1,47 +1,64 @@
 
-from numpy import insert
+from pickletools import read_unicodestring4
 
 
 class Node:
-
-    def __init__(self, key):
-        self.val = key
-        self.right = None
+    def __init__(self, val):
+        self.val = val
         self.left = None
+        self.right = None
 
-    def insert(root, key):
-        if root is None:
-            return Node(key)
-        else:
-            if root.val == key:
-                return root
-            elif root.val < key:
-                root.right = insert(root.right, key)
-            else:
-                root.left = insert(root.left, key)
-        return root
+    def insert(self, val):
+        if self.val == None:
+            self.val = val
+            return
 
-    def contains(self, key):
-        if (key == self.val):
-            return True
-        elif (key < self.val):
-            if (self.left == None):
-                return False
-            else:
-                return self.left.contains(key)
-        else:
-            if (self.right == None):
-                return False
-            else:
-                return self.right.contains(key)
+        if self.val == val:
+            return
+
+        if self.val < val:
+            if self.right:
+                self.right.insert(val)
+                return
+            self.right = Node(val)
+            return
+
+        if self.left:
+            self.left.insert(val)
+            return
+        self.left = Node(val)
+        return
+
+    def print(self):
+        if self.val:
+            if self.left:
+                self.left.print()
+            print(self.val)
+            if self.right:
+                self.right.print()
+
+    def search(self, val):
+        if self.val:
+            if self.val == val:
+                return True
+
+            if val < self.val:
+                if self.left == None:
+                    return False
+                return self.left.search(val)
+
+            if val > self.val:
+                if self.right == None:
+                    return False
+                return self.right.search(val)
 
 
-r = Node(50)
-r = insert(r, 30)
-r = insert(r, 20)
-r = insert(r, 40)
-r = insert(r, 70)
-r = insert(r, 60)
-r = insert(r, 80)
+r = Node(5)
+r.insert(15)
+r.insert(30)
+r.insert(71)
+r.insert(59)
+r.insert(11)
 
-print(r.contains)
+r.print()
+print(r.search(14))
